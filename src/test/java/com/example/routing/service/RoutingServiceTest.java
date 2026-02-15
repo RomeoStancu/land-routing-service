@@ -1,5 +1,7 @@
 package com.example.routing.service;
 
+import com.example.routing.exception.CountryNotFoundException;
+import com.example.routing.exception.RouteNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,17 +27,18 @@ class RoutingServiceTest {
     }
 
     @Test
-    void shouldReturnEmptyWhenNoLandRouteExists() {
-        List<String> route = routingService.findRoute("ISL", "ITA");
-        assertTrue(route.isEmpty());
+    void shouldThrowWhenNoLandRouteExists() {
+        Exception ex = assertThrows(RouteNotFoundException.class, () ->
+                routingService.findRoute("ISL", "ITA")
+        );
+        assertTrue(ex.getMessage().contains("No land route found from"));
     }
 
     @Test
     void shouldThrowForInvalidCountryCode() {
-        Exception ex = assertThrows(IllegalArgumentException.class, () ->
-                routingService.findRoute("XXX", "ITA")
+        Exception ex = assertThrows(CountryNotFoundException.class, () ->
+                routingService.findRoute("XCV", "ITA")
         );
-
-        assertTrue(ex.getMessage().contains("Invalid country code"));
+        assertTrue(ex.getMessage().contains("Country not found:"));
     }
 }

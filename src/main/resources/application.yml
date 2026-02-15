@@ -1,0 +1,12 @@
+application:
+  name: routing-service
+
+# Root logging level
+logging:
+  level:
+    root: INFO                    # default for everything
+    com.example.routing.service.RoutingService: TRACE  # detailed logs for RoutingService
+
+# Optional: server port
+server:
+  port: 8080
